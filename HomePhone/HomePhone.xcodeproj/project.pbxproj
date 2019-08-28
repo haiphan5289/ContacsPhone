@@ -14,6 +14,7 @@
 		93ECE97123142D26007A05AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93ECE96F23142D26007A05AC /* LaunchScreen.storyboard */; };
 		93ECE97923142DAC007A05AC /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93ECE97823142DAC007A05AC /* Extension.swift */; };
 		93ECE97B231585C7007A05AC /* ExpandableNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93ECE97A231585C7007A05AC /* ExpandableNames.swift */; };
+		93ECE97D2316C272007A05AC /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93ECE97C2316C272007A05AC /* ContactCell.swift */; };
 		FA943053DD2884597ED52BAA /* Pods_HomePhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58440E698F2C877B45511BEC /* Pods_HomePhone.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 		93ECE97223142D26007A05AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93ECE97823142DAC007A05AC /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		93ECE97A231585C7007A05AC /* ExpandableNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableNames.swift; sourceTree = "<group>"; };
+		93ECE97C2316C272007A05AC /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				93ECE97A231585C7007A05AC /* ExpandableNames.swift */,
 				93ECE96623142D22007A05AC /* AppDelegate.swift */,
 				93ECE96823142D22007A05AC /* ViewController.swift */,
+				93ECE97C2316C272007A05AC /* ContactCell.swift */,
 				93ECE96A23142D22007A05AC /* Main.storyboard */,
 				93ECE96D23142D26007A05AC /* Assets.xcassets */,
 				93ECE96F23142D26007A05AC /* LaunchScreen.storyboard */,
@@ -209,6 +212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93ECE97D2316C272007A05AC /* ContactCell.swift in Sources */,
 				93ECE97B231585C7007A05AC /* ExpandableNames.swift in Sources */,
 				93ECE97923142DAC007A05AC /* Extension.swift in Sources */,
 				93ECE96923142D22007A05AC /* ViewController.swift in Sources */,

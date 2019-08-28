@@ -20,9 +20,15 @@ class ViewController: UIViewController {
     //tạo 1 array
     var twoDimensionalArray = [
         //tạo hàm struct để check mảng nào đước close
-        ExpandableNames(isExpand: true, names: ["Amy", "Bill", "Zack", "Steven", "Jack", "Jill", "Mary"]),
-        ExpandableNames(isExpand: true, names: ["Carl", "Chistinano", "Camero", "Chill"]),
-        ExpandableNames(isExpand: true, names: ["Daniel", "David"]),
+        //map từng phần từ của mảng name >>> contact
+        ExpandableNames(isExpand: true, names: ["Amy", "Bill", "Zack", "Steven", "Jack", "Jill", "Mary"].map({ Contact(name: $0, hasFavorite: false )
+        })),
+        ExpandableNames(isExpand: true, names: ["Carl", "Chistinano", "Camero", "Chill"].map({ Contact(name: $0, hasFavorite: false)
+        })),
+        ExpandableNames(isExpand: true, names: [Contact(name: "Daniel", hasFavorite: false),
+                                                Contact(name: "Dian", hasFavorite: false)
+            
+            ]),
     ]
     var tb: UITableView!
     var isShowSection: Bool = false
@@ -51,7 +57,7 @@ class ViewController: UIViewController {
         }
         tb.delegate = self
         tb.dataSource = self
-        tb.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tb.register(ContactCell.self, forCellReuseIdentifier: "cell")
 
     }
     
@@ -77,6 +83,21 @@ class ViewController: UIViewController {
         let animation = isShowSection ? UITableView.RowAnimation.right : .left
         tb.reloadRows(at: arrayIndexPath, with: .right)
     }
+    
+    func MethodCheckFavoriteWhenClick(cell: UITableViewCell){
+        let indexPath = tb.indexPath(for: cell)
+        guard let index = indexPath else { return }
+        var isCheckFavorite = twoDimensionalArray[index.section].names[index.row].hasFavorite
+        if isCheckFavorite {
+            twoDimensionalArray[index.section].names[index.row].hasFavorite = false
+            cell.accessoryView?.tintColor = .lightGray
+        }
+        else{
+            cell.accessoryView?.tintColor = .red
+            twoDimensionalArray[index.section].names[index.row].hasFavorite = true
+            print(twoDimensionalArray[index.section].names[index.row].hasFavorite)
+        }
+    }
 
 
 }
@@ -93,19 +114,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ContactCell
 //        let name = self.names[indexPath.row]
 //        let anotherName = self.anotherListOfNames[indexPath.row]
 //        let name = indexPath.section == 0 ? self.names[indexPath.row] : self.anotherListOfNames[indexPath.row]
         //truy cập tới phần tử của section.row
+        //bật biến viewController, để khi cell đá về viewVC thì VC hứng nó
+        cell.viewController = self
         let name = self.twoDimensionalArray[indexPath.section].names[indexPath.row]
         if isShowSection {
-            cell?.textLabel?.text = name + " Section \(indexPath.section)" + "   \(indexPath.row)"
+            cell.textLabel?.text = name.name + " Section \(indexPath.section)" + "   \(indexPath.row)"
         }
         else{
-            cell?.textLabel?.text = name
+            cell.textLabel?.text = name.name
         }
-        return cell!
+        return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

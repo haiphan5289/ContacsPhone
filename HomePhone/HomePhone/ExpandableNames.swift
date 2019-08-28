@@ -10,5 +10,12 @@ import Foundation
 
 struct ExpandableNames {
     var isExpand: Bool
-    var names: [String]
+    var names: [Contact]
+}
+
+//tạo 1 struct
+//để kiểm tra xem Contact đó có đang bật Favorite
+struct Contact {
+    var name: String
+    var hasFavorite: Bool
 }
