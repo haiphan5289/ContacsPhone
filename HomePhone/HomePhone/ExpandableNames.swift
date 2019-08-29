@@ -7,15 +7,18 @@
 //
 
 import Foundation
+import Contacts
 
 struct ExpandableNames {
     var isExpand: Bool
-    var names: [Contact]
+    var names: [FavoritesContact]
 }
 
 //tạo 1 struct
 //để kiểm tra xem Contact đó có đang bật Favorite
-struct Contact {
-    var name: String
+struct FavoritesContact {
+    //tạo biên name là contact
+    //để chứa dữ liệu contact từ device trả về 
+    var name: CNContact
     var hasFavorite: Bool
 }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Contacts
 
 class ViewController: UIViewController {
 
@@ -18,18 +18,20 @@ class ViewController: UIViewController {
 //        "Carl", "Chistinano", "Camero", "Chill"
 //    ]
     //tạo 1 array
-    var twoDimensionalArray = [
-        //tạo hàm struct để check mảng nào đước close
-        //map từng phần từ của mảng name >>> contact
-        ExpandableNames(isExpand: true, names: ["Amy", "Bill", "Zack", "Steven", "Jack", "Jill", "Mary"].map({ Contact(name: $0, hasFavorite: false )
-        })),
-        ExpandableNames(isExpand: true, names: ["Carl", "Chistinano", "Camero", "Chill"].map({ Contact(name: $0, hasFavorite: false)
-        })),
-        ExpandableNames(isExpand: true, names: [Contact(name: "Daniel", hasFavorite: false),
-                                                Contact(name: "Dian", hasFavorite: false)
-            
-            ]),
-    ]
+//    var twoDimensionalArray = [
+//        //tạo hàm struct để check mảng nào đước close
+//        //map từng phần từ của mảng name >>> contact
+//        ExpandableNames(isExpand: true, names: ["Amy", "Bill", "Zack", "Steven", "Jack", "Jill", "Mary"].map({ FavoritesContact(name: $0, hasFavorite: false )
+//        })),
+//        ExpandableNames(isExpand: true, names: ["Carl", "Chistinano", "Camero", "Chill"].map({ FavoritesContact(name: $0, hasFavorite: false)
+//        })),
+//        ExpandableNames(isExpand: true, names: [FavoritesContact(name: "Daniel", hasFavorite: false),
+//                                                FavoritesContact(name: "Dian", hasFavorite: false)
+//
+//            ]),
+//    ]
+    //tạo 1 mảng là biến ExpandableNames
+    var twoDimensionalArray: [ExpandableNames] = [ExpandableNames]()
     var tb: UITableView!
     var isShowSection: Bool = false
     var btClose: UIButton!
@@ -44,6 +46,54 @@ class ViewController: UIViewController {
     func ImplementCode(){
         setupNavigation()
         setupTableData()
+        fetchContacts()
+    }
+    
+    //lấy dữ liệu contacts
+    func fetchContacts(){
+        let contactStore = CNContactStore()
+        //yêu cầu truy cập contacs
+        contactStore.requestAccess(for: .contacts) { (granted, err) in
+            if err != nil {
+                print("\(err?.localizedDescription)")
+                return
+            }
+            if granted {
+                //tạo 1 mảng để add contacts
+                var favoritesContact = [FavoritesContact]()
+                do {
+                    //tạo 1 keys để truy cập thuộc tính của contact
+                    let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey]
+                    //tạo 1 biến request
+                    let fetchRequest = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                    //truỳen tham số request vào
+                    try contactStore.enumerateContacts(with: fetchRequest, usingBlock: { (contact, hihi) in
+                        //add vảo mảng
+                       favoritesContact.append(FavoritesContact(name: contact, hasFavorite: false))
+                    })
+                    let names = ExpandableNames(isExpand: true, names: favoritesContact)
+                    self.twoDimensionalArray = [names]
+                    var arrayText: [String] = [String]()
+                    for i in favoritesContact{
+                        var a = i.name.givenName.prefix(1)
+                        if arrayText.contains(String(a)) {
+                            
+                        }
+                        else {
+                            arrayText.append(String(a))
+                        }
+                        
+                    }
+                    print(arrayText)
+                }catch let err as NSError {
+                    print(err)
+                }
+
+            }
+            else {
+
+            }
+        }
     }
     
     
@@ -95,7 +145,6 @@ class ViewController: UIViewController {
         else{
             cell.accessoryView?.tintColor = .red
             twoDimensionalArray[index.section].names[index.row].hasFavorite = true
-            print(twoDimensionalArray[index.section].names[index.row].hasFavorite)
         }
     }
 
@@ -114,19 +163,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ContactCell
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ContactCell
 //        let name = self.names[indexPath.row]
 //        let anotherName = self.anotherListOfNames[indexPath.row]
 //        let name = indexPath.section == 0 ? self.names[indexPath.row] : self.anotherListOfNames[indexPath.row]
         //truy cập tới phần tử của section.row
         //bật biến viewController, để khi cell đá về viewVC thì VC hứng nó
+        let cell = ContactCell(style: .subtitle, reuseIdentifier: "cell")
         cell.viewController = self
-        let name = self.twoDimensionalArray[indexPath.section].names[indexPath.row]
+        let contact = self.twoDimensionalArray[indexPath.section].names[indexPath.row]
         if isShowSection {
-            cell.textLabel?.text = name.name + " Section \(indexPath.section)" + "   \(indexPath.row)"
+            cell.textLabel?.text = contact.name.givenName + " Section \(indexPath.section)" + "   \(indexPath.row)"
         }
         else{
-            cell.textLabel?.text = name.name
+            cell.textLabel?.text = contact.name.givenName
+            cell.detailTextLabel?.text = contact.name.phoneNumbers.first?.value.stringValue
         }
         return cell
     }
